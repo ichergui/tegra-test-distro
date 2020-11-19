@@ -1,5 +1,4 @@
-PACKAGECONFIG_remove_secureboot = "recovery"
-
+PACKAGECONFIG = "display"
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:${THISDIR}/files:"
 
 SRC_URI += "\

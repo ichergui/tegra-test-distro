@@ -1,0 +1,58 @@
+From cbe8c99fd2b49899e45f9c89c5e5622b617f9a09 Mon Sep 17 00:00:00 2001
+From: Matt Madison <matt@madison.systems>
+Date: Thu, 19 Nov 2020 07:56:47 -0800
+Subject: [PATCH] Add machine ID from fuses to kernel command line
+
+Signed-off-by: Matt Madison <matt@madison.systems>
+---
+ .../lib/linuxboot/t186/linuxboot_helper.c     | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+
+diff --git a/bootloader/partner/t18x/common/lib/linuxboot/t186/linuxboot_helper.c b/bootloader/partner/t18x/common/lib/linuxboot/t186/linuxboot_helper.c
+index 158370c..9f70a6f 100644
+--- a/bootloader/partner/t18x/common/lib/linuxboot/t186/linuxboot_helper.c
++++ b/bootloader/partner/t18x/common/lib/linuxboot/t186/linuxboot_helper.c
+@@ -499,6 +499,35 @@ static int add_vbmeta_info(char *cmdline, int len, char *param, void *priv)
+ }
+ #endif
+ 
++static int add_machine_id(char *cmdline, int len, char *param, void *priv)
++{
++	tegrabl_error_t err;
++	uint32_t val;
++	char machine_id[65];
++	int midlen, i;
++
++	if (cmdline == NULL | param == NULL)
++		return -1;
++
++	for (midlen = 0, i = 0; i < 4; i += 1, midlen += 8) {
++		err = tegrabl_fuse_read(FUSE_RESERVED_ODM0 + i, &val, sizeof(val));
++		if (err != TEGRABL_NO_ERROR) {
++			pr_error("Failed to read fuse RESERVED_ODM%d\n", i);
++			return -1;
++		}
++		if (val == 0) {
++			pr_info("No machine ID set in fuses\n");
++			return -1;
++		}
++		if (tegrabl_snprintf(machine_id+midlen, sizeof(machine_id)-midlen, "%08x", val) != 8) {
++			pr_error("Error formatting machine ID word %d\n", i);
++			return -1;
++		}
++	}
++	machine_id[midlen] = '\0';
++	return tegrabl_snprintf(cmdline, len, "%s=%s", param, machine_id);
++}
++
+ static struct tegrabl_linuxboot_param extra_params[] = {
+ 	{ "tegraid", add_tegraid, NULL },
+ 	{ "maxcpus", add_maxcpus, NULL },
+@@ -531,6 +560,7 @@ static struct tegrabl_linuxboot_param extra_params[] = {
+ #if defined(CONFIG_ENABLE_NVDEC)
+ 	{ "nvdec_enabled", tegrabl_linuxboot_add_nvdec_enabled_info, NULL },
+ #endif
++	{ "systemd.machine_id", add_machine_id, NULL },
+ 	{ NULL, NULL, NULL},
+ };
+ 
