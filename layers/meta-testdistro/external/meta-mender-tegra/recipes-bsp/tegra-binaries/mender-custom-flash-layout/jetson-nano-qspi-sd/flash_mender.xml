@@ -282,7 +282,6 @@
             <allocation_attribute> 0x8 </allocation_attribute>
 	    <percent_reserved> 0 </percent_reserved>
 	    <filename> DATAFILE </filename>
-	    <description>/data mount point for Mender</description>
         </partition>
         <partition name="LOGS" type="data">
             <allocation_policy> sequential </allocation_policy>
@@ -298,10 +297,6 @@
             <size> 2097152 </size>
             <allocation_attribute> 0x808 </allocation_attribute>
 	    <percent_reserved> 0 </percent_reserved>
-            <description>Extra space for rootfs overlay filesystems and other stoarge.
-	      Automatically takes all remaining space on the device except that
-              occupied by the `secondary_gpt` partition. Allocation attribute must be set to 0x808.
-              May be mounted and used to store user data. </description>
         </partition>
 
         <partition name="GPT" type="GPT">
