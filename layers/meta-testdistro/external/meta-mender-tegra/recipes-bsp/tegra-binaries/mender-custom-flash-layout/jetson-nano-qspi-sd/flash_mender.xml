@@ -59,7 +59,7 @@
             <description> U-Boot environment area  </description>
         </partition>
 
-        <partition name="VER_b" id="7" type="data">
+        <partition name="VER_b" type="data">
             <allocation_policy> sequential </allocation_policy>
             <filesystem_type> basic </filesystem_type>
 	    <start_location> 0x3E0000 </start_location>
@@ -73,7 +73,7 @@
               information. </description>
         </partition>
 
-        <partition name="VER" id="8" type="data">
+        <partition name="VER" type="data">
             <allocation_policy> sequential </allocation_policy>
             <filesystem_type> basic </filesystem_type>
 	    <start_location> 0x3F0000 </start_location>
@@ -282,8 +282,8 @@
             <allocation_attribute> 0x8 </allocation_attribute>
 	    <percent_reserved> 0 </percent_reserved>
 	    <filename> DATAFILE </filename>
-	    <description>/data mount point for Mender</description>
         </partition>
+
         <partition name="LOGS" id="26" type="data">
             <allocation_policy> sequential </allocation_policy>
             <filesystem_type> basic </filesystem_type>
@@ -292,16 +292,13 @@
 	    <percent_reserved> 0 </percent_reserved>
             <description>/var/log partition</description>
         </partition>
+
         <partition name="EXTRA" id="27" type="data">
             <allocation_policy> sequential </allocation_policy>
             <filesystem_type> basic </filesystem_type>
             <size> 2097152 </size>
             <allocation_attribute> 0x808 </allocation_attribute>
 	    <percent_reserved> 0 </percent_reserved>
-            <description>Extra space for rootfs overlay filesystems and other stoarge.
-	      Automatically takes all remaining space on the device except that
-              occupied by the `secondary_gpt` partition. Allocation attribute must be set to 0x808.
-              May be mounted and used to store user data. </description>
         </partition>
 
         <partition name="GPT" id="28" type="GPT">
