@@ -4,8 +4,6 @@
 # so that it will persist between updates.
 #
 
-set -eu
-
 FUSED_ID=$(tegra-fuse-tool --show-machine-id)
 [ -z "$FUSED_ID" ] || exit 0
 
