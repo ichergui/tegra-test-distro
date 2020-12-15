@@ -1,9 +1,6 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
-SRC_URI_remove = "file://redundant-boot-commit-script"
-SRC_URI_remove = "file://redundant-boot-rollback-script"
 SRC_URI_remove = "file://redundant-boot-rollback-script-uboot"
-SRC_URI_remove = "file://redundant-boot-rollback-reboot-script"
 
 copy_install_script() {
     sed -e's,@COPY_MACHINE_ID@,${PERSIST_MACHINE_ID},' ${S}/redundant-boot-install-script > ${MENDER_STATE_SCRIPTS_DIR}/ArtifactInstall_Leave_80_bl-update
